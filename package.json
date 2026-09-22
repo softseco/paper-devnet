@@ -1,0 +1,30 @@
+{
+  "name": "paper-devnet",
+  "version": "0.1.0",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "demo": "tsx scripts/demo.ts",
+    "lint": "tsc --noEmit",
+    "test": "anchor test --skip-build --provider.cluster localnet"
+  },
+  "dependencies": {
+    "@coral-xyz/anchor": "^0.31.1",
+    "@softseco/confidential-transfers": "^2.0.0",
+    "@solana-program/system": "^0.12.2",
+    "@solana-program/token-2022": "^0.11.0",
+    "@solana/kit": "^6.10.0",
+    "@solana/spl-token": "^0.4.9",
+    "@solana/web3.js": "^1.95.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.0",
+    "tsx": "^4.19.1",
+    "typescript": "^5.4.5",
+    "@types/chai": "^4.3.14",
+    "@types/mocha": "^10.0.6",
+    "chai": "^4.4.1",
+    "mocha": "^10.4.0",
+    "ts-mocha": "^10.0.0"
+  }
+}

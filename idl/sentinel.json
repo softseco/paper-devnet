@@ -1,0 +1,821 @@
+{
+  "address": "5fH1jj6XeZC96jPCxKiSb2onAXcs7f4rMeqMmSsP6puD",
+  "metadata": {
+    "name": "sentinel",
+    "version": "2.0.0",
+    "spec": "0.1.0",
+    "description": "Programmable compliance for Token-2022 tokenized assets, built on Transfer Hooks."
+  },
+  "instructions": [
+    {
+      "name": "add_to_allowlist",
+      "docs": [
+        "Add a wallet to a mint's allowlist by creating its `AllowEntry` PDA."
+      ],
+      "discriminator": [
+        149,
+        143,
+        78,
+        134,
+        241,
+        244,
+        7,
+        56
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "policy_config"
+          ]
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "policy_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  108,
+                  105,
+                  99,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "wallet"
+        },
+        {
+          "name": "allow_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  108,
+                  108,
+                  111,
+                  119
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              },
+              {
+                "kind": "account",
+                "path": "wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "add_to_blocklist",
+      "docs": [
+        "Add a wallet to a mint's blocklist by creating its `BlockEntry` PDA."
+      ],
+      "discriminator": [
+        201,
+        138,
+        75,
+        216,
+        252,
+        201,
+        26,
+        106
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "policy_config"
+          ]
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "policy_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  108,
+                  105,
+                  99,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "wallet"
+        },
+        {
+          "name": "block_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  108,
+                  111,
+                  99,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              },
+              {
+                "kind": "account",
+                "path": "wallet"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_extra_account_meta_list",
+      "docs": [
+        "Create and initialize the `ExtraAccountMetaList` PDA for `mint`, declaring",
+        "the accounts the hook needs on every transfer: the policy config, the",
+        "sender's and recipient's blocklist entries, and the recipient's allowlist",
+        "entry (all resolved from the transfer's own accounts)."
+      ],
+      "discriminator": [
+        92,
+        197,
+        174,
+        197,
+        41,
+        124,
+        19,
+        3
+      ],
+      "accounts": [
+        {
+          "name": "payer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "extra_account_meta_list",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_policy",
+      "docs": [
+        "Create the mint's `PolicyConfig`. The signer becomes its authority."
+      ],
+      "discriminator": [
+        9,
+        186,
+        86,
+        225,
+        129,
+        162,
+        231,
+        56
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "policy_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  108,
+                  105,
+                  99,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "allowlist_enabled",
+          "type": "bool"
+        },
+        {
+          "name": "blocklist_enabled",
+          "type": "bool"
+        },
+        {
+          "name": "max_transfer_amount",
+          "type": "u64"
+        },
+        {
+          "name": "allow_confidential",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "name": "remove_from_allowlist",
+      "docs": [
+        "Remove a wallet from a mint's allowlist by closing its `AllowEntry` PDA."
+      ],
+      "discriminator": [
+        45,
+        46,
+        214,
+        56,
+        189,
+        77,
+        242,
+        227
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "policy_config"
+          ]
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "policy_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  108,
+                  105,
+                  99,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "wallet"
+        },
+        {
+          "name": "allow_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  97,
+                  108,
+                  108,
+                  111,
+                  119
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              },
+              {
+                "kind": "account",
+                "path": "wallet"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "remove_from_blocklist",
+      "docs": [
+        "Remove a wallet from a mint's blocklist by closing its `BlockEntry` PDA."
+      ],
+      "discriminator": [
+        132,
+        125,
+        30,
+        120,
+        139,
+        22,
+        210,
+        90
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "writable": true,
+          "signer": true,
+          "relations": [
+            "policy_config"
+          ]
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "policy_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  108,
+                  105,
+                  99,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "wallet"
+        },
+        {
+          "name": "block_entry",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  98,
+                  108,
+                  111,
+                  99,
+                  107
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              },
+              {
+                "kind": "account",
+                "path": "wallet"
+              }
+            ]
+          }
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "transfer_hook",
+      "docs": [
+        "Invoked by Token-2022 on every transfer. Enforces the mint's policy."
+      ],
+      "discriminator": [
+        220,
+        57,
+        220,
+        152,
+        126,
+        125,
+        97,
+        168
+      ],
+      "accounts": [
+        {
+          "name": "source_token"
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "destination_token"
+        },
+        {
+          "name": "owner"
+        },
+        {
+          "name": "extra_account_meta_list",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  101,
+                  120,
+                  116,
+                  114,
+                  97,
+                  45,
+                  97,
+                  99,
+                  99,
+                  111,
+                  117,
+                  110,
+                  116,
+                  45,
+                  109,
+                  101,
+                  116,
+                  97,
+                  115
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "policy_config",
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  108,
+                  105,
+                  99,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        },
+        {
+          "name": "source_block"
+        },
+        {
+          "name": "dest_block"
+        },
+        {
+          "name": "allow_entry"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "update_policy",
+      "docs": [
+        "Update the mint's policy. Only the policy authority may call this."
+      ],
+      "discriminator": [
+        212,
+        245,
+        246,
+        7,
+        163,
+        151,
+        18,
+        57
+      ],
+      "accounts": [
+        {
+          "name": "authority",
+          "signer": true,
+          "relations": [
+            "policy_config"
+          ]
+        },
+        {
+          "name": "mint"
+        },
+        {
+          "name": "policy_config",
+          "writable": true,
+          "pda": {
+            "seeds": [
+              {
+                "kind": "const",
+                "value": [
+                  112,
+                  111,
+                  108,
+                  105,
+                  99,
+                  121
+                ]
+              },
+              {
+                "kind": "account",
+                "path": "mint"
+              }
+            ]
+          }
+        }
+      ],
+      "args": [
+        {
+          "name": "allowlist_enabled",
+          "type": "bool"
+        },
+        {
+          "name": "blocklist_enabled",
+          "type": "bool"
+        },
+        {
+          "name": "max_transfer_amount",
+          "type": "u64"
+        },
+        {
+          "name": "allow_confidential",
+          "type": "bool"
+        }
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "AllowEntry",
+      "discriminator": [
+        3,
+        29,
+        6,
+        254,
+        2,
+        209,
+        219,
+        245
+      ]
+    },
+    {
+      "name": "BlockEntry",
+      "discriminator": [
+        160,
+        179,
+        255,
+        246,
+        122,
+        148,
+        254,
+        143
+      ]
+    },
+    {
+      "name": "PolicyConfig",
+      "discriminator": [
+        219,
+        7,
+        79,
+        84,
+        175,
+        51,
+        148,
+        146
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "RecipientNotAllowlisted",
+      "msg": "Recipient is not on the allowlist for this mint"
+    },
+    {
+      "code": 6001,
+      "name": "TransferExceedsLimit",
+      "msg": "Transfer amount exceeds the policy limit"
+    },
+    {
+      "code": 6002,
+      "name": "SenderBlocked",
+      "msg": "Sender is blocklisted for this mint"
+    },
+    {
+      "code": 6003,
+      "name": "RecipientBlocked",
+      "msg": "Recipient is blocklisted for this mint"
+    },
+    {
+      "code": 6004,
+      "name": "Unauthorized",
+      "msg": "Only the policy authority may perform this action"
+    },
+    {
+      "code": 6005,
+      "name": "ConfidentialAmountNotEnforceable",
+      "msg": "This mint sets a transfer limit, which cannot be enforced on a confidential transfer; set allow_confidential on the policy to permit them"
+    }
+  ],
+  "types": [
+    {
+      "name": "AllowEntry",
+      "docs": [
+        "An allowlist entry: its existence means `wallet` may receive `mint`."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "BlockEntry",
+      "docs": [
+        "A blocklist entry: its existence means `wallet` may neither send nor receive `mint`."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "wallet",
+            "type": "pubkey"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "PolicyConfig",
+      "docs": [
+        "Per-mint compliance policy: which rules are active and their parameters."
+      ],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "mint",
+            "type": "pubkey"
+          },
+          {
+            "name": "authority",
+            "type": "pubkey"
+          },
+          {
+            "name": "allowlist_enabled",
+            "type": "bool"
+          },
+          {
+            "name": "blocklist_enabled",
+            "type": "bool"
+          },
+          {
+            "name": "max_transfer_amount",
+            "type": "u64"
+          },
+          {
+            "name": "allow_confidential",
+            "docs": [
+              "Permit confidential transfers on a mint that also sets",
+              "`max_transfer_amount`. The limit cannot be enforced on an encrypted",
+              "amount, so the issuer opts in to that gap explicitly. Irrelevant when no",
+              "limit is set, because there is then nothing to enforce."
+            ],
+            "type": "bool"
+          },
+          {
+            "name": "bump",
+            "type": "u8"
+          }
+        ]
+      }
+    }
+  ]
+}
