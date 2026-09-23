@@ -25,7 +25,10 @@ jobs:
           cargo fmt --all --check
           cargo clippy --all-targets -- -D warnings
       - name: Build
-        run: anchor build --no-idl -- --tools-version v1.57
+        run: |
+          anchor build --no-idl -- --tools-version v1.57
+          # anchor.workspace reads target/idl, and --tools-version is not valid in the IDL step
+          anchor idl build -o target/idl/paper.json -t target/types/paper.ts
       - name: Test
         run: |
           npm ci || npm install
