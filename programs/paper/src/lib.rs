@@ -8,9 +8,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::{
     associated_token::AssociatedToken,
-    token_interface::{
-        self, Burn, Mint, MintTo, TokenAccount, TokenInterface, TransferChecked,
-    },
+    token_interface::{self, Burn, Mint, MintTo, TokenAccount, TokenInterface, TransferChecked},
 };
 
 declare_id!("7twaRXVbxhiv9TZnjdbZQjkc9sQYXjbEgu5UWaFbt4zH");
@@ -56,8 +54,8 @@ pub mod paper {
     pub fn attest_identity(ctx: Context<AttestIdentity>, wallet: Pubkey) -> Result<()> {
         let config = &ctx.accounts.config;
         let signer = ctx.accounts.signer.key();
-        let allowed = signer == config.kyc_authority
-            || (config.allow_self_attest && signer == wallet);
+        let allowed =
+            signer == config.kyc_authority || (config.allow_self_attest && signer == wallet);
         require!(allowed, PaperError::NotKycAuthority);
 
         let identity = &mut ctx.accounts.identity;
@@ -66,7 +64,10 @@ pub mod paper {
         identity.verified_at = Clock::get()?.unix_timestamp;
         identity.partner = signer;
         identity.bump = ctx.bumps.identity;
-        emit!(IdentityAttested { wallet, partner: signer });
+        emit!(IdentityAttested {
+            wallet,
+            partner: signer
+        });
         Ok(())
     }
 
@@ -150,7 +151,10 @@ pub mod paper {
             ),
             amount,
         )?;
-        emit!(Minted { wallet: ctx.accounts.user.key(), amount });
+        emit!(Minted {
+            wallet: ctx.accounts.user.key(),
+            amount
+        });
         Ok(())
     }
 
@@ -189,7 +193,10 @@ pub mod paper {
             amount,
             usdc_decimals,
         )?;
-        emit!(Redeemed { wallet: ctx.accounts.user.key(), amount });
+        emit!(Redeemed {
+            wallet: ctx.accounts.user.key(),
+            amount
+        });
         Ok(())
     }
 
@@ -218,7 +225,11 @@ pub mod paper {
         entry.bump = ctx.bumps.entry;
 
         ctx.accounts.config.disclosure_count = index + 1;
-        emit!(DisclosureRecorded { index, subject, reason_code });
+        emit!(DisclosureRecorded {
+            index,
+            subject,
+            reason_code
+        });
         Ok(())
     }
 }
