@@ -26,6 +26,8 @@ pub const FAUCET_AMOUNT: u64 = 1_000_000_000;
 pub const FAUCET_COOLDOWN: i64 = 86_400;
 /// A disclosure is recorded immediately and takes effect a day later.
 pub const DISCLOSURE_DELAY: i64 = 86_400;
+/// Layout version of the `Config` account, so a client can tell deployments apart.
+pub const CONFIG_VERSION: u8 = 1;
 
 #[program]
 pub mod paper {
@@ -46,7 +48,12 @@ pub mod paper {
         config.auditor = auditor;
         config.allow_self_attest = allow_self_attest;
         config.disclosure_count = 0;
+        config.created_at = Clock::get()?.unix_timestamp;
+        config.version = CONFIG_VERSION;
         config.bump = ctx.bumps.config;
+        if allow_self_attest {
+            msg!("PAPER: self-attestation is ON — devnet only, never a real deployment");
+        }
         Ok(())
     }
 
@@ -55,8 +62,12 @@ pub mod paper {
     pub fn attest_identity(ctx: Context<AttestIdentity>, wallet: Pubkey) -> Result<()> {
         let config = &ctx.accounts.config;
         let signer = ctx.accounts.signer.key();
-        let allowed =
-            signer == config.kyc_authority || (config.allow_self_attest && signer == wallet);
+        let identity_exists = ctx.accounts.identity.wallet != Pubkey::default();
+        let revoked = identity_exists && !ctx.accounts.identity.verified;
+        // Self-attestation is the devnet shortcut, but it must not be a way to undo a revocation:
+        // once a wallet has been struck off, only the KYC partner can put it back.
+        let allowed = signer == config.kyc_authority
+            || (config.allow_self_attest && signer == wallet && !revoked);
         require!(allowed, PaperError::NotKycAuthority);
 
         let identity = &mut ctx.accounts.identity;
@@ -90,10 +101,8 @@ pub mod paper {
         let now = Clock::get()?.unix_timestamp;
         let record = &mut ctx.accounts.faucet_record;
         if record.wallet != Pubkey::default() {
-            require!(
-                now - record.last_drip >= FAUCET_COOLDOWN,
-                PaperError::FaucetCooldown
-            );
+            let elapsed = now.saturating_sub(record.last_drip);
+            require!(elapsed >= FAUCET_COOLDOWN, PaperError::FaucetCooldown);
         }
         record.wallet = ctx.accounts.recipient.key();
         record.last_drip = now;
@@ -114,6 +123,10 @@ pub mod paper {
             ),
             FAUCET_AMOUNT,
         )?;
+        emit!(FaucetDripped {
+            wallet: ctx.accounts.recipient.key(),
+            amount: FAUCET_AMOUNT,
+        });
         Ok(())
     }
 
@@ -222,10 +235,13 @@ pub mod paper {
         entry.requested_by = signer;
         entry.reason_code = reason_code;
         entry.created_at = now;
-        entry.effective_at = now + DISCLOSURE_DELAY;
+        entry.effective_at = now
+            .checked_add(DISCLOSURE_DELAY)
+            .ok_or(PaperError::ArithmeticOverflow)?;
         entry.bump = ctx.bumps.entry;
 
-        ctx.accounts.config.disclosure_count = index + 1;
+        ctx.accounts.config.disclosure_count =
+            index.checked_add(1).ok_or(PaperError::ArithmeticOverflow)?;
         emit!(DisclosureRecorded {
             index,
             subject,
@@ -247,7 +263,9 @@ pub struct Config {
     pub kyc_authority: Pubkey,
     pub auditor: Pubkey,
     pub disclosure_count: u64,
+    pub created_at: i64,
     pub allow_self_attest: bool,
+    pub version: u8,
     pub bump: u8,
 }
 
@@ -407,7 +425,7 @@ pub struct MintEusd<'info> {
     pub test_usdc_mint: InterfaceAccount<'info, Mint>,
     #[account(mut, token::mint = test_usdc_mint, token::authority = user)]
     pub user_usdc: InterfaceAccount<'info, TokenAccount>,
-    #[account(mut, address = config.vault)]
+    #[account(mut, address = config.vault, token::token_program = token_program)]
     pub vault: InterfaceAccount<'info, TokenAccount>,
     #[account(mut, token::mint = eusd_mint, token::authority = user)]
     pub user_eusd: InterfaceAccount<'info, TokenAccount>,
@@ -432,7 +450,7 @@ pub struct RedeemEusd<'info> {
     pub test_usdc_mint: InterfaceAccount<'info, Mint>,
     #[account(mut, token::mint = test_usdc_mint, token::authority = user)]
     pub user_usdc: InterfaceAccount<'info, TokenAccount>,
-    #[account(mut, address = config.vault)]
+    #[account(mut, address = config.vault, token::token_program = token_program)]
     pub vault: InterfaceAccount<'info, TokenAccount>,
     #[account(mut, token::mint = eusd_mint, token::authority = user)]
     pub user_eusd: InterfaceAccount<'info, TokenAccount>,
@@ -471,6 +489,12 @@ pub struct IdentityRevoked {
 }
 
 #[event]
+pub struct FaucetDripped {
+    pub wallet: Pubkey,
+    pub amount: u64,
+}
+
+#[event]
 pub struct Minted {
     pub wallet: Pubkey,
     pub amount: u64,
@@ -503,4 +527,6 @@ pub enum PaperError {
     FaucetCooldown,
     #[msg("The protocol config is not the mint authority of this mint")]
     MintAuthorityNotHeld,
+    #[msg("Arithmetic overflow")]
+    ArithmeticOverflow,
 }

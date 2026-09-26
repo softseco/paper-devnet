@@ -227,4 +227,74 @@ describe("paper", () => {
     await expectFailure(mintFor(alice, unit(10)), "NotVerified");
     expect(await balanceOf(ata(eusd, alice.publicKey))).to.equal(before);
   });
+  it("refuses to initialize when the config would not hold the mint authority", async () => {
+    const strayKeypair = Keypair.generate();
+    const strayConfig = PublicKey.findProgramAddressSync(
+      [Buffer.from("config"), strayKeypair.publicKey.toBuffer()], program.programId)[0];
+    const strayVault = PublicKey.findProgramAddressSync(
+      [Buffer.from("vault"), strayConfig.toBuffer()], program.programId)[0];
+    // Mint authority stays with the deployer instead of passing to the protocol.
+    const stray = await createMint(connection, payer, payer.publicKey, null, DECIMALS, strayKeypair,
+      { commitment: "confirmed" }, TOKEN_2022_PROGRAM_ID);
+
+    await expectFailure(
+      program.methods
+        .initialize(payer.publicKey, payer.publicKey, true)
+        .accountsPartial({
+          authority: payer.publicKey,
+          config: strayConfig,
+          eusdMint: stray,
+          testUsdcMint: testUsdc,
+          vault: strayVault,
+          tokenProgram: TOKEN_2022_PROGRAM_ID,
+          systemProgram: SystemProgram.programId,
+        })
+        .rpc(),
+      "MintAuthorityNotHeld",
+    );
+  });
+
+  it("will not let a revoked wallet put itself back in the registry", async () => {
+    // Alice was revoked in the previous test, and self-attestation is on for this config.
+    await expectFailure(
+      program.methods
+        .attestIdentity(alice.publicKey)
+        .accountsPartial({
+          signer: alice.publicKey,
+          config,
+          identity: identityOf(alice.publicKey),
+          systemProgram: SystemProgram.programId,
+        })
+        .signers([alice])
+        .rpc(),
+      "NotKycAuthority",
+    );
+  });
+
+  it("refuses to redeem for a wallet that is not verified", async () => {
+    await expectFailure(
+      program.methods
+        .redeemEusd(unit(10))
+        .accountsPartial({
+          user: alice.publicKey,
+          config,
+          identity: identityOf(alice.publicKey),
+          eusdMint: eusd,
+          testUsdcMint: testUsdc,
+          userUsdc: ata(testUsdc, alice.publicKey),
+          vault,
+          userEusd: ata(eusd, alice.publicKey),
+          tokenProgram: TOKEN_2022_PROGRAM_ID,
+        })
+        .signers([alice])
+        .rpc(),
+      "NotVerified",
+    );
+  });
+
+  it("stamps the config with a version and a creation time", async () => {
+    const state = await (program.account as any).config.fetch(config);
+    expect(state.version).to.equal(1);
+    expect(state.createdAt.toNumber()).to.be.greaterThan(0);
+  });
 });

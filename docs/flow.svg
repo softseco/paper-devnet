@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" width="980" height="420" role="img" aria-label="PAPER devnet flow: identity is checked at mint and redeem; amounts are encrypted in between">
+  <rect width="980" height="420" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+  <style>
+    .t { font: 600 15px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; fill: #0f172a }
+    .s { font: 400 12.5px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; fill: #475569 }
+    .k { font: 600 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; fill: #1315ff }
+    .m { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #0f172a }
+    .box { fill: #f8fafc; stroke: #cbd5e1 }
+    .gate { fill: #eef2ff; stroke: #c7d2fe }
+    .priv { fill: #ecfdf5; stroke: #a7f3d0 }
+    .arrow { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#a) }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <text class="k" x="40" y="46">PERIMETER — identity is checked</text>
+  <text class="k" x="404" y="46" fill="#047857">INSIDE — amounts are encrypted</text>
+  <text class="k" x="800" y="46">PERIMETER</text>
+
+  <rect class="gate" x="40" y="62" width="300" height="230" rx="12"/>
+  <rect class="priv" x="368" y="62" width="352" height="230" rx="12"/>
+  <rect class="gate" x="748" y="62" width="192" height="230" rx="12"/>
+
+  <rect class="box" x="64" y="92" width="252" height="58" rx="10"/>
+  <text class="t" x="80" y="116">Faucet</text>
+  <text class="s" x="80" y="136">1000 test USDC per wallet per day</text>
+
+  <rect class="box" x="64" y="164" width="252" height="58" rx="10"/>
+  <text class="t" x="80" y="188">Identity Whitelist Registry</text>
+  <text class="s" x="80" y="208">a KYC partner vouches for a wallet</text>
+
+  <rect class="box" x="64" y="236" width="252" height="40" rx="10"/>
+  <text class="t" x="80" y="261">Mint eUSD 1:1 into the vault</text>
+
+  <rect class="box" x="392" y="92" width="304" height="58" rx="10"/>
+  <text class="t" x="408" y="116">Confidential transfer</text>
+  <text class="s" x="408" y="136">amount is ciphertext on-chain</text>
+
+  <rect class="box" x="392" y="164" width="304" height="58" rx="10"/>
+  <text class="t" x="408" y="188">Sentinel transfer hook</text>
+  <text class="s" x="408" y="208">blocklist and limits, enforced by the chain</text>
+
+  <rect class="box" x="392" y="236" width="304" height="40" rx="10"/>
+  <text class="t" x="408" y="261">Auditor key — decrypts on lawful request</text>
+
+  <rect class="box" x="772" y="92" width="144" height="58" rx="10"/>
+  <text class="t" x="788" y="116">Redeem</text>
+  <text class="s" x="788" y="136">burn, take USDC back</text>
+
+  <rect class="box" x="772" y="164" width="144" height="112" rx="10"/>
+  <text class="t" x="788" y="188">Disclosure</text>
+  <text class="t" x="788" y="208">register</text>
+  <text class="s" x="788" y="230">public entry,</text>
+  <text class="s" x="788" y="248">effective after</text>
+  <text class="s" x="788" y="266">24 hours</text>
+
+  <path class="arrow" d="M 324 265 L 384 178"/>
+  <path class="arrow" d="M 704 178 L 764 130"/>
+
+  <text class="s" x="40" y="330">A recipient needs no identity record to be paid. Identity is checked only where money enters and leaves the system.</text>
+  <text class="m" x="40" y="360">paper: 7twaRXVbxhiv9TZnjdbZQjkc9sQYXjbEgu5UWaFbt4zH</text>
+  <text class="m" x="40" y="382">sentinel: 5fH1jj6XeZC96jPCxKiSb2onAXcs7f4rMeqMmSsP6puD</text>
+  <text class="s" x="40" y="404">Devnet only. Test tokens with no value.</text>
+</svg>

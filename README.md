@@ -1,11 +1,16 @@
 # PAPER devnet
 
+[![ci](https://github.com/softseco/paper-devnet/actions/workflows/ci.yml/badge.svg)](https://github.com/softseco/paper-devnet/actions/workflows/ci.yml)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](./LICENSE)
+
 A working devnet prototype of the PAPER Protocol: a dollar token whose amounts are encrypted
 on-chain, whose mint and redeem are gated by an identity registry, whose transfers are checked by an
 on-chain compliance policy, and whose disclosures to an auditor are recorded in public.
 
 > **Devnet only. Every token here is a test token with no value, and nothing on this page is an
 > offer of anything.**
+
+![How the pieces fit together](docs/flow.svg)
 
 ## What it shows
 
@@ -47,6 +52,18 @@ balances included.
 | `redeem_eusd` | A verified wallet burns eUSD and takes test USDC back 1:1. |
 | `record_disclosure` | Writes a disclosure to the public register, effective 24 hours later. |
 
+## Who sees what
+
+| | Sees the amount | Sees the identity |
+|---|---|---|
+| The public | no | no — but addresses are public, so the transaction graph is |
+| The recipient | yes | no |
+| The mint's auditor | yes, by decrypting | no |
+| The KYC partner | no | yes, at the perimeter only |
+| The protocol | no | only at mint and redeem |
+
+The reasoning, and the limits of this prototype, are in [SECURITY.md](./SECURITY.md).
+
 ## Built on
 
 Two packages released **before** this hackathon, and disclosed as prior work:
@@ -65,7 +82,7 @@ mint with a hook fails with `MissingAccount`.
 ```bash
 anchor build --no-idl -- --tools-version v1.57   # the flag is not valid in the IDL step
 anchor idl build -o target/idl/paper.json        # so the IDL is built separately
-anchor test --skip-build --provider.cluster localnet   # 7 tests, no devnet needed
+anchor test --skip-build --provider.cluster localnet   # 11 tests, no devnet needed
 npx tsx scripts/demo.ts                          # the full story, against devnet
 ```
 
