@@ -79,6 +79,20 @@ describe("paper", () => {
   const balanceOf = async (account: PublicKey) =>
     BigInt((await connection.getTokenAccountBalance(account)).value.amount);
 
+  const supplyOf = async () =>
+    (await getMint(connection, eusd, "confirmed", TOKEN_2022_PROGRAM_ID)).supply;
+
+  /** A confirmed transaction can still be one slot ahead of a read, so give the chain a moment. */
+  async function eventually(read: () => Promise<bigint>, expected: bigint, label: string) {
+    let last = 0n;
+    for (let i = 0; i < 20; i++) {
+      last = await read();
+      if (last === expected) return;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+    expect(last, label).to.equal(expected);
+  }
+
   async function expectFailure(promise: Promise<unknown>, code: string) {
     try {
       await promise;
@@ -154,10 +168,9 @@ describe("paper", () => {
       { commitment: "confirmed" }, TOKEN_2022_PROGRAM_ID);
 
     await mintFor(alice, unit(100));
-    expect(await balanceOf(vault)).to.equal(100_000_000n);
+    await eventually(() => balanceOf(vault), 100_000_000n, "vault after mint");
     expect(await balanceOf(ata(eusd, alice.publicKey))).to.equal(100_000_000n);
-    const supply = (await getMint(connection, eusd, "confirmed", TOKEN_2022_PROGRAM_ID)).supply;
-    expect(supply).to.equal(await balanceOf(vault));
+    await eventually(supplyOf, 100_000_000n, "eUSD supply after mint");
     await expectFailure(mintFor(alice, new BN(0)), "ZeroAmount");
   });
 
@@ -177,9 +190,8 @@ describe("paper", () => {
       })
       .signers([alice])
       .rpc();
-    const supply = (await getMint(connection, eusd, "confirmed", TOKEN_2022_PROGRAM_ID)).supply;
-    expect(await balanceOf(vault)).to.equal(60_000_000n);
-    expect(supply).to.equal(60_000_000n);
+    await eventually(() => balanceOf(vault), 60_000_000n, "vault after redeem");
+    await eventually(supplyOf, 60_000_000n, "eUSD supply after redeem");
   });
 
   it("records a disclosure, and only for the authority", async () => {
