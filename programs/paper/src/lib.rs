@@ -6,6 +6,7 @@
 //! Everything here runs on devnet with valueless test tokens.
 
 use anchor_lang::prelude::*;
+use anchor_lang::solana_program::program_option::COption;
 use anchor_spl::{
     associated_token::AssociatedToken,
     token_interface::{self, Burn, Mint, MintTo, TokenAccount, TokenInterface, TransferChecked},
@@ -295,9 +296,19 @@ pub struct Initialize<'info> {
         bump
     )]
     pub config: Account<'info, Config>,
-    #[account(mint::token_program = token_program)]
+    // The protocol can only be trusted to issue and redeem if it actually holds both mint
+    // authorities. Check it here rather than taking the deployer's word for it.
+    #[account(
+        mint::token_program = token_program,
+        constraint = eusd_mint.mint_authority == COption::Some(config.key())
+            @ PaperError::MintAuthorityNotHeld,
+    )]
     pub eusd_mint: InterfaceAccount<'info, Mint>,
-    #[account(mint::token_program = token_program)]
+    #[account(
+        mint::token_program = token_program,
+        constraint = test_usdc_mint.mint_authority == COption::Some(config.key())
+            @ PaperError::MintAuthorityNotHeld,
+    )]
     pub test_usdc_mint: InterfaceAccount<'info, Mint>,
     #[account(
         init,
@@ -490,4 +501,6 @@ pub enum PaperError {
     ZeroAmount,
     #[msg("The faucet allows one drip per wallet per day")]
     FaucetCooldown,
+    #[msg("The protocol config is not the mint authority of this mint")]
+    MintAuthorityNotHeld,
 }

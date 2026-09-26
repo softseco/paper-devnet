@@ -735,6 +735,11 @@
       "code": 6004,
       "name": "FaucetCooldown",
       "msg": "The faucet allows one drip per wallet per day"
+    },
+    {
+      "code": 6005,
+      "name": "MintAuthorityNotHeld",
+      "msg": "The protocol config is not the mint authority of this mint"
     }
   ],
   "types": [
