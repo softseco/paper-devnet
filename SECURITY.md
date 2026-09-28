@@ -31,8 +31,9 @@ deployed program. A reply comes within three working days.
   token. The invariant the demo checks is between the issued eUSD and the vault, not against
   anything real.
 - The upgrade authority of both programs is a single key.
-- A confidential balance cannot be redeemed yet: moving value from a confidential balance back to a
-  public one needs a withdraw path the TypeScript SDK does not have.
+- A confidential balance cannot be redeemed in the demo yet. The SDK has `withdraw` since 3.0.0,
+  but this prototype runs on 2.1.0 (it is built on `@solana/kit` 6), so the demo redeems public eUSD
+  only.
 - Neither program has been independently audited.
 
 ## Dependencies

@@ -2,7 +2,19 @@
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## Unreleased
+## 2026-09-28
+
+### Fixed
+- `package-lock.json` pinned `@softseco/confidential-transfers` 2.0.0, which cannot send a
+  confidential transfer on a mint with a transfer hook (`MissingAccount`). A fresh `npm ci`
+  installed a version the demo cannot run on. The dependency is now `^2.1.0` and the lockfile
+  resolves 2.1.0.
+
+### Changed
+- README and SECURITY say where withdraw stands: the SDK has it since 3.0.0, and this prototype stays
+  on 2.1.0 because it is built on `@solana/kit` 6.
+
+## 2026-09-26
 
 ### Added
 - `initialize` verifies that the config PDA is the mint authority of both the eUSD mint and the

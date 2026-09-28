@@ -73,9 +73,11 @@ Two packages released **before** this hackathon, and disclosed as prior work:
 - [`sentinel`](https://github.com/softseco/sentinel) — programmable compliance through a Token-2022
   transfer hook: allowlist, blocklist, per-transfer limit.
 
-Work done during the hackathon: this program, this demo, the tests, and transfer-hook account
-resolution for confidential transfers in the SDK (2.1.0), without which a confidential transfer on a
-mint with a hook fails with `MissingAccount`.
+Work done during the hackathon: this program, this demo, the tests, and two SDK releases.
+2.1.0 added transfer-hook account resolution for confidential transfers, without which a
+confidential transfer on a mint with a hook fails with `MissingAccount`. 3.0.0 added `withdraw` and
+moved the SDK to `@solana/kit` 8. This prototype runs on 2.1.0, because it is built on
+`@solana/kit` 6.
 
 ## Run it
 
@@ -97,8 +99,9 @@ public one refuses websocket connections partway through.
   and it is the one thing in this repository that has no place in a real deployment.
 - **The auditor and the KYC partner are the same key as the deployer** in the demo run. In the
   design they are separate parties.
-- **A confidential balance cannot be redeemed yet.** Moving value back from a confidential balance to
-  a public one needs a withdraw path the TypeScript SDK does not have yet.
+- **A confidential balance cannot be redeemed in this demo yet.** The SDK has `withdraw` since 3.0.0,
+  but this prototype runs on 2.1.0 (it is built on `@solana/kit` 6), so the demo redeems public eUSD
+  only.
 - **Nothing here has been independently audited**, and the program's upgrade authority is a single
   key.
 
