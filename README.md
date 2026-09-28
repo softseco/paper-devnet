@@ -82,6 +82,7 @@ moved the SDK to `@solana/kit` 8. This prototype runs on 2.1.0, because it is bu
 ## Run it
 
 ```bash
+npm ci                                           # dependencies, pinned by the lockfile
 anchor build --no-idl -- --tools-version v1.57   # the flag is not valid in the IDL step
 anchor idl build -o target/idl/paper.json        # so the IDL is built separately
 anchor test --skip-build --provider.cluster localnet   # 11 tests, no devnet needed
