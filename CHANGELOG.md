@@ -2,7 +2,9 @@
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
-## 2026-09-28
+## [0.1.0] - 2026-09-28
+
+First tagged version: the build that runs on devnet. It includes everything below.
 
 ### Fixed
 - `package-lock.json` pinned `@softseco/confidential-transfers` 2.0.0, which cannot send a
