@@ -1,67 +1,144 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" width="980" height="420" role="img" aria-label="PAPER devnet flow: identity is checked at mint and redeem; amounts are encrypted in between">
-  <rect width="980" height="420" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
-  <style>
-    .t { font: 600 15px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; fill: #0f172a }
-    .s { font: 400 12.5px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; fill: #475569 }
-    .k { font: 600 12px system-ui, -apple-system, Segoe UI, Roboto, sans-serif; fill: #1315ff }
-    .m { font: 600 12px ui-monospace, SFMono-Regular, Menlo, monospace; fill: #0f172a }
-    .box { fill: #f8fafc; stroke: #cbd5e1 }
-    .gate { fill: #eef2ff; stroke: #c7d2fe }
-    .priv { fill: #ecfdf5; stroke: #a7f3d0 }
-    .arrow { stroke: #94a3b8; stroke-width: 2; fill: none; marker-end: url(#a) }
-  </style>
-  <defs>
-    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
-    </marker>
-  </defs>
-
-  <text class="k" x="40" y="46">PERIMETER — identity is checked</text>
-  <text class="k" x="404" y="46" fill="#047857">INSIDE — amounts are encrypted</text>
-  <text class="k" x="800" y="46">PERIMETER</text>
-
-  <rect class="gate" x="40" y="62" width="300" height="230" rx="12"/>
-  <rect class="priv" x="368" y="62" width="352" height="230" rx="12"/>
-  <rect class="gate" x="748" y="62" width="192" height="230" rx="12"/>
-
-  <rect class="box" x="64" y="92" width="252" height="58" rx="10"/>
-  <text class="t" x="80" y="116">Faucet</text>
-  <text class="s" x="80" y="136">1000 test USDC per wallet per day</text>
-
-  <rect class="box" x="64" y="164" width="252" height="58" rx="10"/>
-  <text class="t" x="80" y="188">Identity Whitelist Registry</text>
-  <text class="s" x="80" y="208">a KYC partner vouches for a wallet</text>
-
-  <rect class="box" x="64" y="236" width="252" height="40" rx="10"/>
-  <text class="t" x="80" y="261">Mint eUSD 1:1 into the vault</text>
-
-  <rect class="box" x="392" y="92" width="304" height="58" rx="10"/>
-  <text class="t" x="408" y="116">Confidential transfer</text>
-  <text class="s" x="408" y="136">amount is ciphertext on-chain</text>
-
-  <rect class="box" x="392" y="164" width="304" height="58" rx="10"/>
-  <text class="t" x="408" y="188">Sentinel transfer hook</text>
-  <text class="s" x="408" y="208">blocklist and limits, enforced by the chain</text>
-
-  <rect class="box" x="392" y="236" width="304" height="40" rx="10"/>
-  <text class="t" x="408" y="261">Auditor key — decrypts on lawful request</text>
-
-  <rect class="box" x="772" y="92" width="144" height="58" rx="10"/>
-  <text class="t" x="788" y="116">Redeem</text>
-  <text class="s" x="788" y="136">burn, take USDC back</text>
-
-  <rect class="box" x="772" y="164" width="144" height="112" rx="10"/>
-  <text class="t" x="788" y="188">Disclosure</text>
-  <text class="t" x="788" y="208">register</text>
-  <text class="s" x="788" y="230">public entry,</text>
-  <text class="s" x="788" y="248">effective after</text>
-  <text class="s" x="788" y="266">24 hours</text>
-
-  <path class="arrow" d="M 324 265 L 384 178"/>
-  <path class="arrow" d="M 704 178 L 764 130"/>
-
-  <text class="s" x="40" y="330">A recipient needs no identity record to be paid. Identity is checked only where money enters and leaves the system.</text>
-  <text class="m" x="40" y="360">paper: 7twaRXVbxhiv9TZnjdbZQjkc9sQYXjbEgu5UWaFbt4zH</text>
-  <text class="m" x="40" y="382">sentinel: 5fH1jj6XeZC96jPCxKiSb2onAXcs7f4rMeqMmSsP6puD</text>
-  <text class="s" x="40" y="404">Devnet only. Test tokens with no value.</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 872" width="960" height="872" role="img" aria-label="PAPER devnet: identity is checked at mint and redeem; in between, eUSD moves by confidential transfer with encrypted amounts and every transfer passes the Sentinel hook; the mint's auditor can decrypt an amount and each disclosure is recorded in a public register, effective after 24 hours." xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTowODBkOTY0My1jYmM3LTRkMTgtYThkZi1kYWRkNDU3ZGRlMTIAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaCvuVxIMWb/5SeFyhFq7DQMAAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDo3MTYyZmZkOC00YTBlLTQzNmUtYTkwNy1lM2FjMmY4ZGFiNjFscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNoDIqUIAmi53pnWlgRKoaYFAAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggZBLzOPTw6RLrkGRaTpZQhUSE6iQa5TF4leZxmBip0ROkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaPp47zwpJITwWzr6x8wkO8EAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRMAAAAAAAAAAAAAAAAZGhhc2hYIGwT8d0KZ/9NHLCPd1MbsHdcVE70JV41F9VMBmlHcaQkZG5hbWVuanVtYmYgbWFuaWZlc3RqZXhjbHVzaW9uc4GiZXN0YXJ0GQHRZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjA4MGQ5NjQzLWNiYzctNGQxOC1hOGRmLWRhZGQ0NTdkZGUxMi9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOjE4MWZkMDFmLWM5OTQtNDQ1Yi1iMmI4LTY1MGExMmEwYTRiZXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCBkEvM49PDpEuuQZFpOllCFRITqJBrlMXiV5nGYGKnRE6JjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggpITPUtvQI16VmOkEu16y48JJzeD7/ZI6ieHzo0q8vpaiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFggxOxB7lNB4i3Fww47rf5FLMKGT99+BI6ygijEBD2nPCR0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQL1yAFJdoj6ZLkLy7R9a7H3dgJSyxTtjvrJ+qesj8PaeHdSBPA/v0MJm1wf3cpBvQKTlPWScs6GgvupQzF24qGs=</c2pa:manifest></metadata>
+<title>How PAPER devnet fits together</title>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0.5 1.2 L9 5 L0.5 8.8 z" fill="#4a4f5a"/></marker>
+<marker id="arrowB" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0.5 1.2 L9 5 L0.5 8.8 z" fill="#1315ff"/></marker>
+<marker id="arrowW" viewBox="0 0 10 10" refX="8.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse"><path d="M0.5 1.2 L9 5 L0.5 8.8 z" fill="#ffffff"/></marker>
+<marker id="dotend" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5"><circle cx="5" cy="5" r="3.4" fill="#6b7280"/></marker>
+</defs>
+<rect x="0.75" y="0.75" width="958.5" height="870.5" rx="16" fill="#ffffff" stroke="#e8eaed" stroke-width="1.5"/>
+<text x="32" y="58" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="21" font-weight="800" fill="#0a0b0d" letter-spacing="-0.4">How PAPER devnet fits together</text>
+<text x="32" y="84" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="13" font-weight="450" fill="#6b7280">Identity is checked where money enters and leaves. In between, amounts are encrypted and every transfer passes Sentinel.</text>
+<rect x="696" y="38" width="232" height="26" rx="13" fill="#fff6e5" stroke="#fbdd9c" stroke-width="1"/>
+<text x="812" y="55" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="9.5" font-weight="700" fill="#9a5b00" text-anchor="middle" letter-spacing="0.8">DEVNET · TEST TOKENS, NO VALUE</text>
+<line x1="32" y1="104" x2="928" y2="104" stroke="#e8eaed" stroke-width="1.5"/>
+<rect x="318" y="128" width="324" height="82" rx="12" fill="#ffffff" stroke="#e8eaed" stroke-width="1.5"/>
+<text x="342" y="156" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10" font-weight="700" fill="#1315ff" letter-spacing="0.9">SENTINEL · TRANSFER HOOK</text>
+<text x="342" y="179" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="15" font-weight="700" fill="#0a0b0d" letter-spacing="-0.2">Blocklist and limits</text>
+<text x="342" y="198" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12.5" font-weight="450" fill="#4a4f5a">500 eUSD cap on public transfers</text>
+<line x1="480" y1="214" x2="480" y2="252" stroke="#4a4f5a" stroke-width="1.6" marker-end="url(#arrow)" stroke-linecap="round"/>
+<text x="490" y="240" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11" font-weight="600" fill="#4a4f5a">Token-2022 calls it on every transfer</text>
+<rect x="32" y="258" width="238" height="236" rx="12" fill="#ffffff" stroke="#e8eaed" stroke-width="1.5"/>
+<text x="54" y="288" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10" font-weight="700" fill="#1315ff" letter-spacing="0.9">ENTRY · IDENTITY CHECKED</text>
+<line x1="66" y1="324" x2="66" y2="436" stroke="#e8eaed" stroke-width="2"/>
+<circle cx="66" cy="324" r="10" fill="#1315ff"/>
+<text x="66" y="328" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">1</text>
+<text x="86" y="328" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="14" font-weight="700" fill="#0a0b0d" letter-spacing="-0.2">Faucet</text>
+<text x="86" y="347" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">1,000 test USDC a day</text>
+<circle cx="66" cy="380" r="10" fill="#1315ff"/>
+<text x="66" y="384" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">2</text>
+<text x="86" y="384" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="14" font-weight="700" fill="#0a0b0d" letter-spacing="-0.2">Identity registry</text>
+<text x="86" y="403" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">simulated KYC attestation</text>
+<circle cx="66" cy="436" r="10" fill="#1315ff"/>
+<text x="66" y="440" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">3</text>
+<text x="86" y="440" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="14" font-weight="700" fill="#0a0b0d" letter-spacing="-0.2">Mint 1:1</text>
+<text x="86" y="459" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">test USDC in, eUSD out</text>
+<rect x="318" y="258" width="324" height="236" rx="14" fill="#0a0b0d"/>
+<text x="342" y="288" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10" font-weight="700" fill="#5b5dff" letter-spacing="0.9">CIRCULATION · AMOUNTS ENCRYPTED</text>
+<text x="342" y="316" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="19" font-weight="800" fill="#ffffff" letter-spacing="-0.3">eUSD on Token-2022</text>
+<circle cx="352" cy="346" r="10" fill="#1315ff"/>
+<text x="352" y="350" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">4</text>
+<text x="372" y="350" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="13.5" font-weight="600" fill="#ffffff">Into a confidential balance</text>
+<circle cx="352" cy="374" r="10" fill="#1315ff"/>
+<text x="352" y="378" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">5</text>
+<text x="372" y="378" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="13.5" font-weight="600" fill="#ffffff">Transfer to a second wallet</text>
+<line x1="342" y1="396" x2="618" y2="396" stroke="#2a2d36" stroke-width="1"/>
+<text x="342" y="420" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12.5" font-weight="500" fill="#c9ced9">Amount</text>
+<rect x="410" y="406" width="86" height="20" rx="6" fill="#1b1d52"/>
+<circle cx="422" cy="416" r="2.6" fill="#8f91ff"/>
+<circle cx="432.3" cy="416" r="2.6" fill="#8f91ff"/>
+<circle cx="442.6" cy="416" r="2.6" fill="#8f91ff"/>
+<circle cx="452.9" cy="416" r="2.6" fill="#8f91ff"/>
+<circle cx="463.2" cy="416" r="2.6" fill="#8f91ff"/>
+<circle cx="473.5" cy="416" r="2.6" fill="#8f91ff"/>
+<circle cx="483.8" cy="416" r="2.6" fill="#8f91ff"/>
+<rect x="544" y="407" width="74" height="20" rx="6" fill="#1315ff"/>
+<text x="581" y="421.5" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="9.5" font-weight="700" fill="#ffffff" text-anchor="middle" letter-spacing="0.7">ENCRYPTED</text>
+<line x1="342" y1="434" x2="618" y2="434" stroke="#2a2d36" stroke-width="1"/>
+<text x="342" y="457" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12.5" font-weight="500" fill="#c9ced9">Sender and recipient</text>
+<rect x="562" y="443" width="56" height="20" rx="6" fill="#2f333d"/>
+<text x="590" y="457.5" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="9.5" font-weight="700" fill="#c9ced9" text-anchor="middle" letter-spacing="0.7">PUBLIC</text>
+<text x="342" y="480" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="450" fill="#878e9c">The recipient needs no identity record.</text>
+<rect x="690" y="258" width="238" height="236" rx="12" fill="#ffffff" stroke="#e8eaed" stroke-width="1.5"/>
+<text x="712" y="288" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10" font-weight="700" fill="#1315ff" letter-spacing="0.9">EXIT · IDENTITY CHECKED</text>
+<circle cx="724" cy="324" r="10" fill="#1315ff"/>
+<text x="724" y="328" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">8</text>
+<text x="744" y="328" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="14" font-weight="700" fill="#0a0b0d" letter-spacing="-0.2">Redeem 1:1</text>
+<text x="744" y="347" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">burn eUSD, test USDC back</text>
+<line x1="712" y1="382" x2="906" y2="382" stroke="#f1f2f5" stroke-width="1.5"/>
+<circle cx="715" cy="406" r="2.6" fill="#1315ff"/>
+<text x="726" y="410" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">the registry is checked again</text>
+<circle cx="715" cy="428" r="2.6" fill="#1315ff"/>
+<text x="726" y="432" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">paid out of the reserve vault</text>
+<circle cx="715" cy="450" r="2.6" fill="#1315ff"/>
+<text x="726" y="454" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">a revoked wallet is refused</text>
+<line x1="274" y1="436" x2="312" y2="436" stroke="#1315ff" stroke-width="1.6" marker-end="url(#arrowB)" stroke-linecap="round"/>
+<text x="294" y="427" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10.5" font-weight="700" fill="#1315ff" text-anchor="middle">mint</text>
+<line x1="646" y1="324" x2="684" y2="324" stroke="#1315ff" stroke-width="1.6" marker-end="url(#arrowB)" stroke-linecap="round"/>
+<text x="666" y="315" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10.5" font-weight="700" fill="#1315ff" text-anchor="middle">redeem</text>
+<rect x="32" y="552" width="238" height="104" rx="12" fill="#ffffff" stroke="#e8eaed" stroke-width="1.5"/>
+<text x="54" y="580" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10" font-weight="700" fill="#1315ff" letter-spacing="0.9">RESERVE VAULT</text>
+<text x="54" y="603" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="14" font-weight="700" fill="#0a0b0d" letter-spacing="-0.2">eUSD issued = USDC held</text>
+<text x="54" y="623" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">checked after every step,</text>
+<text x="54" y="641" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">confidential balances included</text>
+<line x1="66" y1="498" x2="66" y2="546" stroke="#4a4f5a" stroke-width="1.6" marker-end="url(#arrow)" stroke-linecap="round"/>
+<text x="78" y="528" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11" font-weight="600" fill="#4a4f5a">deposit</text>
+<rect x="318" y="552" width="324" height="104" rx="12" fill="#ffffff" stroke="#e8eaed" stroke-width="1.5"/>
+<circle cx="352" cy="576" r="10" fill="#1315ff"/>
+<text x="352" y="580" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">6</text>
+<text x="370" y="580" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10" font-weight="700" fill="#1315ff" letter-spacing="0.9">AUDITOR KEY</text>
+<text x="342" y="603" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="14" font-weight="700" fill="#0a0b0d" letter-spacing="-0.2">Decrypts the amount</text>
+<text x="342" y="623" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">The mint's designated auditor, the only</text>
+<text x="342" y="641" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">third party that can read the amount.</text>
+<line x1="480" y1="548" x2="480" y2="500" stroke="#4a4f5a" stroke-width="1.6" marker-end="url(#arrow)" stroke-linecap="round"/>
+<text x="490" y="528" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11" font-weight="600" fill="#4a4f5a">reads the transfer</text>
+<rect x="690" y="552" width="238" height="104" rx="12" fill="#ffffff" stroke="#e8eaed" stroke-width="1.5"/>
+<circle cx="724" cy="576" r="10" fill="#1315ff"/>
+<text x="724" y="580" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">7</text>
+<text x="742" y="580" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10" font-weight="700" fill="#1315ff" letter-spacing="0.9">DISCLOSURE REGISTER</text>
+<text x="712" y="603" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="14" font-weight="700" fill="#0a0b0d" letter-spacing="-0.2">A public record</text>
+<text x="712" y="623" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">every disclosure on-chain,</text>
+<text x="712" y="641" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="12" font-weight="450" fill="#4a4f5a">effective after 24 hours</text>
+<line x1="646" y1="604" x2="684" y2="604" stroke="#4a4f5a" stroke-width="1.6" marker-end="url(#arrow)" stroke-linecap="round"/>
+<text x="666" y="595" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10.5" font-weight="600" fill="#4a4f5a" text-anchor="middle">recorded</text>
+<rect x="32" y="684" width="896" height="128" rx="12" fill="#f7f8fa" stroke="#e8eaed" stroke-width="1.5"/>
+<circle cx="66" cy="708" r="10" fill="#1315ff"/>
+<text x="66" y="712" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="800" fill="#ffffff" text-anchor="middle">9</text>
+<text x="84" y="712" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="10" font-weight="700" fill="#1315ff" letter-spacing="0.9">SEVEN GUARDS, EACH PROVED BY TRYING TO BREAK IT</text>
+<rect x="56" y="728" width="203" height="34" rx="8" fill="#ffffff" stroke="#e8eaed" stroke-width="1"/>
+<circle cx="74" cy="745" r="8" fill="#fdecec"/>
+<path d="M71 742 l6 6 M77 742 l-6 6" stroke="#d14343" stroke-width="1.8" stroke-linecap="round"/>
+<text x="90" y="749.3" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="500" fill="#1a1d22">Blocked recipient</text>
+<rect x="271" y="728" width="203" height="34" rx="8" fill="#ffffff" stroke="#e8eaed" stroke-width="1"/>
+<circle cx="289" cy="745" r="8" fill="#fdecec"/>
+<path d="M286 742 l6 6 M292 742 l-6 6" stroke="#d14343" stroke-width="1.8" stroke-linecap="round"/>
+<text x="305" y="749.3" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="500" fill="#1a1d22">Amount Sentinel can't see</text>
+<rect x="486" y="728" width="203" height="34" rx="8" fill="#ffffff" stroke="#e8eaed" stroke-width="1"/>
+<circle cx="504" cy="745" r="8" fill="#fdecec"/>
+<path d="M501 742 l6 6 M507 742 l-6 6" stroke="#d14343" stroke-width="1.8" stroke-linecap="round"/>
+<text x="520" y="749.3" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="500" fill="#1a1d22">Mint without KYC</text>
+<rect x="701" y="728" width="203" height="34" rx="8" fill="#ffffff" stroke="#e8eaed" stroke-width="1"/>
+<circle cx="719" cy="745" r="8" fill="#fdecec"/>
+<path d="M716 742 l6 6 M722 742 l-6 6" stroke="#d14343" stroke-width="1.8" stroke-linecap="round"/>
+<text x="735" y="749.3" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="500" fill="#1a1d22">Second faucet drip</text>
+<rect x="56" y="772" width="203" height="34" rx="8" fill="#ffffff" stroke="#e8eaed" stroke-width="1"/>
+<circle cx="74" cy="789" r="8" fill="#fdecec"/>
+<path d="M71 786 l6 6 M77 786 l-6 6" stroke="#d14343" stroke-width="1.8" stroke-linecap="round"/>
+<text x="90" y="793.3" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="500" fill="#1a1d22">Zero-amount mint</text>
+<rect x="271" y="772" width="203" height="34" rx="8" fill="#ffffff" stroke="#e8eaed" stroke-width="1"/>
+<circle cx="289" cy="789" r="8" fill="#fdecec"/>
+<path d="M286 786 l6 6 M292 786 l-6 6" stroke="#d14343" stroke-width="1.8" stroke-linecap="round"/>
+<text x="305" y="793.3" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="500" fill="#1a1d22">Stranger writes the register</text>
+<rect x="486" y="772" width="203" height="34" rx="8" fill="#ffffff" stroke="#e8eaed" stroke-width="1"/>
+<circle cx="504" cy="789" r="8" fill="#fdecec"/>
+<path d="M501 786 l6 6 M507 786 l-6 6" stroke="#d14343" stroke-width="1.8" stroke-linecap="round"/>
+<text x="520" y="793.3" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="500" fill="#1a1d22">Revoked wallet mints</text>
+<rect x="701" y="772" width="203" height="34" rx="8" fill="#ffffff" stroke="#e8eaed" stroke-width="1"/>
+<circle cx="719" cy="789" r="8" fill="#e6f6ef"/>
+<path d="M714.8 789 l3 3 l5.5 -6" fill="none" stroke="#00a86b" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="735" y="793.3" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11.5" font-weight="700" fill="#0a0b0d">Reserve still balances</text>
+<text x="32" y="846" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11" font-weight="600" fill="#6b7280">paper</text>
+<text x="72" y="846" font-family="'JetBrains Mono',SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="11" font-weight="500" fill="#4a4f5a">7twaRXVbxhiv9TZnjdbZQjkc9sQYXjbEgu5UWaFbt4zH</text>
+<text x="411.2" y="846" font-family="Inter,'Helvetica Neue',Helvetica,Arial,'Liberation Sans',sans-serif" font-size="11" font-weight="600" fill="#6b7280">sentinel</text>
+<text x="469.2" y="846" font-family="'JetBrains Mono',SFMono-Regular,Menlo,Consolas,'Liberation Mono',monospace" font-size="11" font-weight="500" fill="#4a4f5a">5fH1jj6XeZC96jPCxKiSb2onAXcs7f4rMeqMmSsP6puD</text>
 </svg>
