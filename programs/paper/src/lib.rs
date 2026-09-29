@@ -216,9 +216,14 @@ pub mod paper {
 
     /// Write a disclosure to the public register. It takes effect a day after it is recorded, so a
     /// disclosure cannot be made and used in the same breath without anyone seeing it.
+    ///
+    /// The register never names who a disclosure is about. It stores a commitment: SHA-256 over
+    /// the domain tag, the entry index, the hash of the full disclosure record and a random salt.
+    /// The record and the salt stay with the issuer, so a supervisor or an auditor can check any
+    /// entry against them, while the chain shows only that a disclosure happened and when.
     pub fn record_disclosure(
         ctx: Context<RecordDisclosure>,
-        subject: Pubkey,
+        commitment: [u8; 32],
         reason_code: u8,
     ) -> Result<()> {
         let signer = ctx.accounts.signer.key();
@@ -226,12 +231,13 @@ pub mod paper {
             signer == ctx.accounts.config.authority || signer == ctx.accounts.config.auditor,
             PaperError::NotAuthority
         );
+        require!(commitment != [0u8; 32], PaperError::EmptyCommitment);
         let now = Clock::get()?.unix_timestamp;
         let index = ctx.accounts.config.disclosure_count;
 
         let entry = &mut ctx.accounts.entry;
         entry.index = index;
-        entry.subject = subject;
+        entry.commitment = commitment;
         entry.requested_by = signer;
         entry.reason_code = reason_code;
         entry.created_at = now;
@@ -244,7 +250,7 @@ pub mod paper {
             index.checked_add(1).ok_or(PaperError::ArithmeticOverflow)?;
         emit!(DisclosureRecorded {
             index,
-            subject,
+            commitment,
             reason_code
         });
         Ok(())
@@ -280,11 +286,13 @@ pub struct IdentityRecord {
     pub bump: u8,
 }
 
+/// One entry in the public disclosure register. Since 0.2.0 it holds a hash commitment where 0.1.0
+/// held the subject's address; the layout and size are unchanged.
 #[account]
 #[derive(InitSpace)]
 pub struct DisclosureEntry {
     pub index: u64,
-    pub subject: Pubkey,
+    pub commitment: [u8; 32],
     pub requested_by: Pubkey,
     pub created_at: i64,
     pub effective_at: i64,
@@ -509,7 +517,7 @@ pub struct Redeemed {
 #[event]
 pub struct DisclosureRecorded {
     pub index: u64,
-    pub subject: Pubkey,
+    pub commitment: [u8; 32],
     pub reason_code: u8,
 }
 
@@ -529,4 +537,6 @@ pub enum PaperError {
     MintAuthorityNotHeld,
     #[msg("Arithmetic overflow")]
     ArithmeticOverflow,
+    #[msg("A disclosure needs a commitment; an all-zero one is not accepted")]
+    EmptyCommitment,
 }

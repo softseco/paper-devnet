@@ -9,7 +9,7 @@ The versions matter here, and the defaults do not work:
 | Anchor | 0.31.1 | matches `anchor-lang` in the program |
 | platform-tools | v1.57 | the default v1.43 has no SBF target for edition-2024 dependencies |
 | Solana CLI | 2.3 or newer | older `cargo-build-sbf` pulls the wrong platform-tools |
-| Node | 20 or newer | |
+| Node | 20.18 or newer | required by `@softseco/confidential-transfers` 3 |
 
 ## Building
 

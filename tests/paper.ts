@@ -16,6 +16,8 @@ import {
 import { Keypair, LAMPORTS_PER_SOL, PublicKey, SystemProgram } from "@solana/web3.js";
 import { expect } from "chai";
 
+import { disclosureCommitment, newSalt } from "../scripts/disclosure";
+
 const DECIMALS = 6;
 const unit = (n: number) => new BN(Math.round(n * 10 ** DECIMALS));
 
@@ -194,27 +196,33 @@ describe("paper", () => {
     await eventually(supplyOf, 60_000_000n, "eUSD supply after redeem");
   });
 
-  it("records a disclosure, and only for the authority", async () => {
+  it("records a disclosure as a commitment that names no one, and only for the authority", async () => {
     const index = (await (program.account as any).config.fetch(config)).disclosureCount as BN;
     const entry = PublicKey.findProgramAddressSync(
       [Buffer.from("disclosure"), config.toBuffer(), index.toArrayLike(Buffer, "le", 8)],
       program.programId)[0];
-
-    await expectFailure(
+    const record = { request_ref: "TEST-1", scope: { addresses: [alice.publicKey.toBase58()] }, date: "2026-09-29" };
+    const salt = newSalt();
+    const commitment = disclosureCommitment(BigInt(index.toString()), record, salt);
+    const record_ = (c: number[], signer: Keypair) =>
       program.methods
-        .recordDisclosure(alice.publicKey, 1)
-        .accountsPartial({ signer: mallory.publicKey, config, entry, systemProgram: SystemProgram.programId })
-        .signers([mallory])
-        .rpc(),
-      "NotAuthority",
-    );
+        .recordDisclosure(c, 1)
+        .accountsPartial({ signer: signer.publicKey, config, entry, systemProgram: SystemProgram.programId })
+        .signers(signer === payer ? [] : [signer])
+        .rpc();
 
-    await program.methods
-      .recordDisclosure(alice.publicKey, 1)
-      .accountsPartial({ signer: payer.publicKey, config, entry, systemProgram: SystemProgram.programId })
-      .rpc();
+    await expectFailure(record_(Array.from(commitment), mallory), "NotAuthority");
+    await expectFailure(record_(new Array(32).fill(0), payer), "EmptyCommitment");
+
+    await record_(Array.from(commitment), payer);
     const recorded = await (program.account as any).disclosureEntry.fetch(entry);
-    expect(recorded.subject.toBase58()).to.equal(alice.publicKey.toBase58());
+    const onChain = Buffer.from(recorded.commitment as number[]);
+    expect(onChain.equals(commitment)).to.equal(true);
+    expect(recorded.subject).to.equal(undefined);
+    // The address the record is about appears nowhere in the account's bytes.
+    const raw = (await connection.getAccountInfo(entry))!.data;
+    expect(raw.includes(alice.publicKey.toBuffer())).to.equal(false);
+    expect(disclosureCommitment(BigInt(index.toString()), record, salt).equals(onChain)).to.equal(true);
     expect(recorded.effectiveAt.toNumber() - recorded.createdAt.toNumber()).to.equal(86_400);
   });
 

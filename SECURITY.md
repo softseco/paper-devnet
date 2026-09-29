@@ -17,6 +17,8 @@ deployed program. A reply comes within three working days.
   hardware modules.
 - **Addresses stay public.** Token-2022 hides amounts, not the transaction graph. Anyone can see
   that two addresses transacted.
+- **Disclosures are counted, not named.** The register shows that a disclosure was recorded and
+  when; the record behind it, and the salt that makes its hash unguessable, stay with the issuer.
 - **The KYC partner sees identity, not payments.** It writes an entry into the registry at the
   perimeter and learns nothing about what a wallet does afterwards.
 - **Compliance is enforced on-chain.** A blocked address is refused by Token-2022 calling Sentinel,
@@ -31,9 +33,9 @@ deployed program. A reply comes within three working days.
   token. The invariant the demo checks is between the issued eUSD and the vault, not against
   anything real.
 - The upgrade authority of both programs is a single key.
-- A confidential balance cannot be redeemed in the demo yet. The SDK has `withdraw` since 3.0.0,
-  but this prototype runs on 2.1.0 (it is built on `@solana/kit` 6), so the demo redeems public eUSD
-  only.
+- The disclosure register holds a hash commitment per entry since 0.2.0. Entries written by 0.1.0
+  still carry the subject's address. Each entry also keeps a coarse reason code and the key of the
+  signer who recorded it; the mainnet design keeps neither on-chain.
 - Neither program has been independently audited.
 
 ## Dependencies

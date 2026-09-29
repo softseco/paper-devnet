@@ -2,7 +2,8 @@
 //
 // PAPER devnet — the whole story in one run.
 //
-//   faucet -> simulated KYC -> mint eUSD 1:1 -> confidential transfer -> auditor reads it -> redeem
+//   faucet -> simulated KYC -> mint eUSD 1:1 -> confidential transfer -> auditor reads it
+//          -> disclosure recorded as a commitment -> withdraw -> redeem
 //
 // Devnet only. Every token here is a test token with no value.
 //
@@ -34,6 +35,7 @@ import {
 import {
   address,
   appendTransactionMessageInstructions,
+  assertIsTransactionWithBlockhashLifetime,
   createKeyPairSignerFromBytes,
   createSolanaRpc,
   createSolanaRpcSubscriptions,
@@ -60,8 +62,10 @@ import {
   deriveAuditorElgamalKeypair,
   getAuditorElgamalPubkey,
   transfer,
+  withdraw,
 } from "@softseco/confidential-transfers";
 
+import { disclosureCommitment, newSalt } from "./disclosure";
 import idl from "../target/idl/paper.json";
 import sentinelIdl from "../idl/sentinel.json";
 
@@ -115,7 +119,9 @@ async function sendKit(payer: TransactionSigner, instructions: Instruction[]): P
     (tx) => setTransactionMessageLifetimeUsingBlockhash(latestBlockhash, tx),
     (tx) => appendTransactionMessageInstructions(instructions, tx),
   );
-  await sendAndConfirm(await signTransactionMessageWithSigners(message), { commitment: "confirmed" });
+  const signed = await signTransactionMessageWithSigners(message);
+  assertIsTransactionWithBlockhashLifetime(signed);
+  await sendAndConfirm(signed, { commitment: "confirmed" });
 }
 
 /** The transfer-hook extension: some client versions take plain addresses, some take options. */
@@ -408,11 +414,11 @@ async function main() {
   await retry("apply pending balance", () => applyPendingBalance({ rpc, rpcSubscriptions, payer: payer.kit, owner: alice.kit, mint: address(eusd.toBase58()) }));
   console.log("   Alice confidential:", fmt(await decryptBalance({ rpc, owner: alice.kit, mint: address(eusd.toBase58()) })));
 
-  console.log("\n7) confidential transfer — 50 eUSD from Alice to Bob, amount encrypted on-chain");
+  console.log("\n7) confidential transfer — 30 eUSD from Alice to Bob, amount encrypted on-chain");
   const { signatures } = await transfer({
     rpc, rpcSubscriptions, payer: payer.kit, owner: alice.kit,
     mint: address(eusd.toBase58()), destinationOwner: bob.addr,
-    amount: unit(50), auditorElgamalPubkey: auditorPubkey,
+    amount: unit(30), auditorElgamalPubkey: auditorPubkey,
   });
   for (const s of signatures) console.log("   https://explorer.solana.com/tx/" + s + "?cluster=devnet");
   await retry("apply pending balance", () => applyPendingBalance({ rpc, rpcSubscriptions, payer: payer.kit, owner: bob.kit, mint: address(eusd.toBase58()) }));
@@ -432,23 +438,50 @@ async function main() {
   }
   console.log("   auditor decrypts:", seen === null ? "not found" : fmt(seen), "eUSD");
 
-  console.log("\n9) disclosure register — recorded now, effective in 24 hours");
+  console.log("\n9) disclosure register — a commitment on-chain, the record off-chain, effective in 24 hours");
   const index = (await (program.account as any).config.fetch(config)).disclosureCount as BN;
   const [entry] = PublicKey.findProgramAddressSync(
     [Buffer.from("disclosure"), config.toBuffer(), index.toArrayLike(Buffer, "le", 8)],
     pid,
   );
+  // What the issuer keeps: who asked, on what basis, and what was disclosed. None of it goes on-chain.
+  const record = {
+    request_ref: `DEVNET-DEMO-${index.toString()}`,
+    authority_category: "financial-intelligence-unit",
+    legal_basis_category: "aml-information-request",
+    scope: { signatures: signatures.map(String), addresses: [bob.key.toBase58()] },
+    key_share_holders: ["auditor"],
+    date: new Date().toISOString().slice(0, 10),
+  };
+  const salt = newSalt();
+  const commitment = disclosureCommitment(BigInt(index.toString()), record, salt);
   await program.methods
-    .recordDisclosure(bob.key, 1)
+    .recordDisclosure(Array.from(commitment), 1)
     .accountsPartial({ signer: payer.key, config, entry, systemProgram: SystemProgram.programId })
     .rpc();
   const recorded = await (program.account as any).disclosureEntry.fetch(entry);
-  console.log("   entry", recorded.index.toString(), "subject", recorded.subject.toBase58(),
-    "effective", new Date(recorded.effectiveAt.toNumber() * 1000).toISOString());
+  const onChain = Buffer.from(recorded.commitment as number[]);
+  console.log("   entry", recorded.index.toString(), "commitment", onChain.toString("hex"));
+  console.log("   effective", new Date(recorded.effectiveAt.toNumber() * 1000).toISOString());
+  console.log("   the entry names no one: no address, no amount — 32 bytes of hash");
+  const check = disclosureCommitment(BigInt(index.toString()), record, salt);
+  if (!check.equals(onChain)) throw new Error("the commitment on-chain does not match the record");
+  console.log("   an auditor given the record and the salt recomputes it: match");
 
-  console.log("\n10) redeem — Alice burns her remaining 50 public eUSD and takes the USDC back");
+  console.log("\n10) withdraw — Alice moves her last 20 confidential eUSD back to her public balance");
+  const withdrawn = await withdraw({
+    rpc, rpcSubscriptions, payer: payer.kit, owner: alice.kit,
+    mint: address(eusd.toBase58()), amount: unit(20), decimals: DECIMALS,
+  });
+  for (const s of withdrawn.signatures) console.log("   https://explorer.solana.com/tx/" + s + "?cluster=devnet");
+  console.log("   Alice confidential:", fmt(await decryptBalance({ rpc, owner: alice.kit, mint: address(eusd.toBase58()) })));
+  const alicePublic = BigInt((await connection.getTokenAccountBalance(ata(eusd, alice.key))).value.amount);
+  console.log("   Alice public:      ", fmt(alicePublic));
+  await backing("after withdraw");
+
+  console.log("\n11) redeem — Alice burns her 70 public eUSD and takes the test USDC back");
   await program.methods
-    .redeemEusd(new BN(unit(50).toString()))
+    .redeemEusd(new BN(unit(70).toString()))
     .accountsPartial({
       user: alice.key,
       config,
@@ -464,7 +497,7 @@ async function main() {
     .rpc();
   await backing("after redeem");
 
-  console.log("\n11) the guards, proved by trying to break them");
+  console.log("\n12) the guards, proved by trying to break them");
   const mallory = await actor("Mallory");
   await sendKit(payer.kit, [
     getTransferSolInstruction({ source: payer.kit, destination: mallory.addr, amount: lamports(120_000_000n) }),
@@ -581,7 +614,7 @@ async function main() {
     "a stranger cannot write to the disclosure register",
     () =>
       program.methods
-        .recordDisclosure(alice.key, 1)
+        .recordDisclosure(Array.from(newSalt()), 1)
         .accountsPartial({ signer: bob.key, config, entry: strangerEntry, systemProgram: SystemProgram.programId })
         .signers([bob.web3])
         .rpc(),
@@ -600,6 +633,8 @@ async function main() {
   console.log("\nwhat just happened");
   console.log("  identity was checked only at mint and redeem; Bob received without one");
   console.log("  the transferred amount is ciphertext on-chain — the auditor read it, nobody else can");
+  console.log("  the disclosure register holds a commitment, not a name; the record stays off-chain");
+  console.log("  a confidential balance came back out by withdraw and was redeemed at par");
   console.log("  every eUSD issued was matched by a test USDC in the vault at each step");
   console.log("  seven guards were checked by trying to break them, and each refused");
   console.log("  compliance is enforced by Token-2022 calling Sentinel, not by the front end");

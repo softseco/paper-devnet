@@ -24,10 +24,12 @@ One run of `scripts/demo.ts` walks the whole story on public devnet:
 2. a simulated KYC partner writes a wallet into the Identity Whitelist Registry
 3. the wallet deposits test USDC into the reserve vault and receives eUSD one for one
 4. half of it moves into a confidential balance
-5. a confidential transfer sends it to a second wallet, amount encrypted on-chain
+5. a confidential transfer sends part of it to a second wallet, amount encrypted on-chain
 6. the mint's designated auditor decrypts that amount — and nobody else can
-7. a disclosure is recorded in a public register, effective 24 hours later
-8. the first wallet redeems its remaining eUSD back out of the vault
+7. a disclosure is recorded in a public register as a hash commitment, effective 24 hours later:
+   the entry names no one, and the record behind it stays with the issuer
+8. the first wallet withdraws the rest of its confidential balance and redeems its eUSD back out
+   of the vault
 9. seven guards are proved by trying to break them, and each refuses
 
 Every step checks the reserve invariant: eUSD issued always equals test USDC held, confidential
@@ -50,7 +52,7 @@ balances included.
 | `faucet_drip` | Mints test USDC to any wallet, once a day. |
 | `mint_eusd` | A verified wallet deposits test USDC into the vault and receives eUSD 1:1. |
 | `redeem_eusd` | A verified wallet burns eUSD and takes test USDC back 1:1. |
-| `record_disclosure` | Writes a disclosure to the public register, effective 24 hours later. |
+| `record_disclosure` | Writes a disclosure to the public register as a 32-byte commitment — no subject, no amount — effective 24 hours later. |
 
 ## Who sees what
 
@@ -76,8 +78,21 @@ Two packages released **before** this hackathon, and disclosed as prior work:
 Work done during the hackathon: this program, this demo, the tests, and two SDK releases.
 2.1.0 added transfer-hook account resolution for confidential transfers, without which a
 confidential transfer on a mint with a hook fails with `MissingAccount`. 3.0.0 added `withdraw` and
-moved the SDK to `@solana/kit` 8. This prototype runs on 2.1.0, because it is built on
-`@solana/kit` 6.
+moved the SDK to `@solana/kit` 8. Since 0.2.0 this prototype runs on 3.0.0.
+
+## Disclosures without names
+
+A public list of who was disclosed would tip those people off, and at full KYC an address is a
+person. So each register entry holds only a commitment:
+
+```
+SHA-256( "PAPER-DISCLOSURE-v1" || index as u64 LE || SHA-256(canonical JSON of the record) || 32-byte salt )
+```
+
+The record — who asked, on what legal basis, which transactions — and the salt stay with the
+issuer. A supervisor or an auditor who is given them recomputes the hash and checks it against the
+entry; everyone else sees only that a disclosure happened and when. The code is in
+[`scripts/disclosure.ts`](./scripts/disclosure.ts).
 
 ## Run it
 
@@ -100,9 +115,9 @@ public one refuses websocket connections partway through.
   and it is the one thing in this repository that has no place in a real deployment.
 - **The auditor and the KYC partner are the same key as the deployer** in the demo run. In the
   design they are separate parties.
-- **A confidential balance cannot be redeemed in this demo yet.** The SDK has `withdraw` since 3.0.0,
-  but this prototype runs on 2.1.0 (it is built on `@solana/kit` 6), so the demo redeems public eUSD
-  only.
+- **Register entries from 0.1.0 still name their subject.** The upgrade changed what new entries
+  hold, not the ones already written. The entry also keeps a coarse reason code and the requester's
+  key, which the mainnet design drops.
 - **Nothing here has been independently audited**, and the program's upgrade authority is a single
   key.
 

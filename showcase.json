@@ -1,0 +1,13 @@
+{
+  "network": "devnet",
+  "paperProgram": "7twaRXVbxhiv9TZnjdbZQjkc9sQYXjbEgu5UWaFbt4zH",
+  "sentinelProgram": "5fH1jj6XeZC96jPCxKiSb2onAXcs7f4rMeqMmSsP6puD",
+  "eusdMint": "FW37aZm8TuWMYs2y9BJbXrKrpNshm6Pis9xcjXaD3xqT",
+  "testUsdcMint": "DTUotbXqgSGy1WTZQSQZX5nb9rxicAjYLk2QYbqnCKFY",
+  "config": "cPz7hQ2c5ZwgWhpFpAH1Rv7H6Vysm84fiC32bzwvtdX",
+  "vault": "7xKECrzkzSpdEkPtn15S3376MpHzR6j3P2BPrHPa5dip",
+  "kycAuthority": "agAEFgxjKsnv2JaWCU8LD1GMx4vQcsXzH7mvRZuh5TQ",
+  "auditorWallet": "6bKnkvxS3rLbb5rPBBpnKqcdLqu4FA8mkmXuLpkiRcu",
+  "auditorElgamalPubkey": "3j6R835chKSbTnpGd59KeECXQ4KtEgguy4kriiD8GZiq",
+  "createdAt": "2026-09-26T15:19:30.449Z"
+}
