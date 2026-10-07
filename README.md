@@ -68,17 +68,21 @@ The reasoning, and the limits of this prototype, are in [SECURITY.md](./SECURITY
 
 ## Built on
 
-Two packages released **before** this hackathon, and disclosed as prior work:
+Two packages that existed **before** this hackathon (1.0, July 2026), disclosed as prior work:
 
 - [`@softseco/confidential-transfers`](https://github.com/softseco/confidential-sdk) — Token-2022
   confidential transfers in TypeScript and Rust, including auditor selective disclosure.
 - [`sentinel`](https://github.com/softseco/sentinel) — programmable compliance through a Token-2022
   transfer hook: allowlist, blocklist, per-transfer limit.
 
-Work done during the hackathon: this program, this demo, the tests, and two SDK releases.
-2.1.0 added transfer-hook account resolution for confidential transfers, without which a
-confidential transfer on a mint with a hook fails with `MissingAccount`. 3.0.0 added `withdraw` and
-moved the SDK to `@solana/kit` 8. Since 0.2.0 this prototype runs on 3.0.0.
+Work done during the hackathon (14 Sep – 12 Oct 2026): this program, this demo and its tests, the
+[browser playground](https://softseco.github.io/confidential-sdk), three SDK releases and three
+Sentinel releases. SDK 2.0.0 moved key derivation to the ecosystem standard. 2.1.0 added
+transfer-hook account resolution for confidential transfers, without which a confidential transfer
+on a mint with a hook fails with `MissingAccount`. 3.0.0 added `withdraw` and moved the SDK to
+`@solana/kit` 8. Sentinel 2.0.0 made policies with a transfer limit handle confidential transfers
+(the `allow_confidential` flag and four new tests), 2.0.1 was its first devnet deployment, and
+2.0.2 was documentation and packaging. Since 0.2.0 this prototype runs on SDK 3.0.0.
 
 ## Disclosures without names
 
